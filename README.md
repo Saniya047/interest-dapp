@@ -1,36 +1,232 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Simple Interest Web3 DApp
 
-## Getting Started
+This project is a **Simple Web3 decentralized application** that calculates **Simple Interest** using a Solidity smart contract deployed on a local blockchain (Ganache) and a frontend built with **Next.js (Pages Router)**. The project uses **MetaMask** for wallet interaction and **Remix IDE** for smart contract compilation and deployment.
 
-First, run the development server:
+---
+
+## Tech Stack
+
+* **OS**: Ubuntu (Linux)
+* **Frontend**: React + Next.js (Pages Router)
+* **Blockchain Simulator**: Ganache
+* **Smart Contract IDE**: Remix Ethereum IDE
+* **Wallet**: MetaMask (Chrome Extension)
+* **Library**: ethers.js
+
+---
+
+## Prerequisites
+
+1. Google Chrome browser
+2. MetaMask browser extension
+3. Node.js & npm installed
+4. Git installed
+
+---
+
+## 1. MetaMask Setup
+
+1. Install **MetaMask** extension from Chrome Web Store
+2. Open MetaMask → Click **Continue with Google / Create Wallet**
+3. Set a password and complete wallet creation
+
+---
+
+## 2. Ganache Installation (Terminal Only)
+
+### Download Ganache
+
+```bash
+cd ~/Downloads
+wget https://github.com/trufflesuite/ganache/releases/download/v2.7.1/ganache-2.7.1-linux-x86_64.AppImage
+```
+
+### Give Execute Permission
+
+```bash
+chmod +x ganache-2.7.1-linux-x86_64.AppImage
+```
+
+### Install FUSE (if required)
+
+```bash
+sudo apt install libfuse2
+```
+
+### Run Ganache
+
+```bash
+./ganache-2.7.1-linux-x86_64.AppImage
+```
+
+Click **Quickstart Ethereum**. Keep Ganache running.
+
+---
+
+## 3. Add Ganache Network in MetaMask
+
+1. Open MetaMask
+2. Click **three lines → Settings → Networks → Add Network → Add Custom Network**
+3. Fill the following details:
+
+```
+Network Name: Ganache
+RPC URL: http://127.0.0.1:7545
+Chain ID: 1337 or 5777 (check in Ganache)
+Currency Symbol: ETH
+```
+
+4. Click **Save**
+
+---
+
+## 4. Import Ganache Account in MetaMask
+
+1. In Ganache, click the **key icon** of any account
+2. Copy the **Private Key**
+3. In MetaMask → **Accounts → Add Wallet → Import Account**
+4. Paste the private key
+5. Ensure balance shows **100 ETH**
+
+---
+
+## 5. Smart Contract (Remix IDE)
+
+### Create Contract File
+
+1. Open [https://remix.ethereum.org](https://remix.ethereum.org)
+2. File Explorer → `contracts/` → New File
+3. Create `interestCal.sol`
+
+### Smart Contract Code
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract InterestCal {
+    uint public R;
+    address public manager;
+
+    constructor() {
+        manager = msg.sender;
+    }
+
+    function updateRate(uint _r) public {
+        require(msg.sender == manager, "Only manager allowed");
+        R = _r;
+    }
+
+    function calculateInterest(uint P, uint T) public view returns (uint) {
+        return (P * R * T) / 100;
+    }
+}
+```
+
+---
+
+## 6. Compile & Deploy Smart Contract
+
+1. Open **Solidity Compiler** in Remix
+2. Select compiler version `0.8.x`
+3. Click **Compile interestCal.sol**
+
+### Deploy
+
+1. Go to **Deploy & Run Transactions**
+2. Environment: **Injected Provider – MetaMask**
+3. Select Ganache account
+4. Gas: **Estimated Gas**
+5. Value: **0 Ether**
+6. Click **Deploy**
+7. Confirm transaction in MetaMask
+
+### Save Contract Address
+
+After deployment, copy the **contract address** from Remix.
+
+---
+
+## 7. Frontend Setup (Next.js)
+
+### Clone Project
+
+```bash
+git clone <your-repo-url>
+cd interest-dapp
+```
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+### Add Contract Address
+
+Paste the deployed contract address in both:
+
+* `pages/manager.js`
+* `pages/user.js`
+
+Example:
+
+```js
+const contractAddress = "0xYourDeployedContractAddress";
+```
+
+---
+
+## 8. Run the Project
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open browser:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 9. Application Pages
 
-To learn more about Next.js, take a look at the following resources:
+* **Home Page** (`index.js`)
+* **Manager Page** (`manager.js`) – Update Interest Rate
+* **User Page** (`user.js`) – Calculate Interest
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Screenshots included:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+* `index.png`
+* `manager1.png`
+* `manager2.png`
+* `user.png`
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 10. Git Commands Used
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+git init
+git add .
+git commit -m "Initial commit - Simple Interest Web3 DApp"
+git branch -M main
+git remote add origin <your-github-repo-url>
+git push -u origin main
+```
+
+---
+
+## Notes
+
+* Ganache must be running while using the app
+* MetaMask must be connected to Ganache network
+* Same account must be used in Ganache, MetaMask, and Remix
+
+---
+
+## Author
+
+Developed as part of a Web3 / Blockchain academic assignment.
