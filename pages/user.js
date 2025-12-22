@@ -2,7 +2,8 @@ import { ethers } from "ethers";
 import { useState } from "react";
 import Link from "next/link";
 
-const contractAddress = "0xC2d68778D04603b546A9a7984AE43ae17CaC534B";
+const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+
 const abi = [
   "function calculateInterest(uint P, uint T) public view returns (uint)"
 ];
