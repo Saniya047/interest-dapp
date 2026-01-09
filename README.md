@@ -1,6 +1,13 @@
 # Simple Interest Web3 DApp
 
 This project is a **Simple Web3 decentralized application** that calculates **Simple Interest** using a Solidity smart contract deployed on a local blockchain (Ganache) and a frontend built with **Next.js (Pages Router)**. The project uses **MetaMask** for wallet interaction and **Remix IDE** for smart contract compilation and deployment.
+In the updated version:
+
+The **Solidity smart contract is included directly in the project**
+
+A **Manager Ownership Transfer** feature is added
+
+**Blockchain event logs** can be viewed from the frontend
 
 ---
 
@@ -96,32 +103,7 @@ Currency Symbol: ETH
 
 1. Open [https://remix.ethereum.org](https://remix.ethereum.org)
 2. File Explorer → `contracts/` → New File
-3. Create `interestCal.sol`
-
-### Smart Contract Code
-
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
-
-contract InterestCal {
-    uint public R;
-    address public manager;
-
-    constructor() {
-        manager = msg.sender;
-    }
-
-    function updateRate(uint _r) public {
-        require(msg.sender == manager, "Only manager allowed");
-        R = _r;
-    }
-
-    function calculateInterest(uint P, uint T) public view returns (uint) {
-        return (P * R * T) / 100;
-    }
-}
-```
+3. Create `interestCal.sol`.Take this file from project files.
 
 ---
 
@@ -162,18 +144,10 @@ cd interest-dapp
 npm install
 ```
 
-### Add Contract Address
+### Add Contract Address and abi from remix
 
-Paste the deployed contract address in both:
-
-* `pages/manager.js`
-* `pages/user.js`
-
-Example:
-
-```js
-const contractAddress = "0xYourDeployedContractAddress";
-```
+Paste the deployed contract address in the env file.
+Paste the ABI of deployed contract in the ../utils/InterestCalAbi.js
 
 ---
 
@@ -194,25 +168,10 @@ http://localhost:3000
 ## 9. Application Pages
 
 * **Home Page** (`index.js`)
-* **Manager Page** (`manager.js`) – Update Interest Rate
+* **Manager Page** (`manager.js`) – Update Interest Rate and change ownership
 * **User Page** (`user.js`) – Calculate Interest
+* **Logs Page** (`logs.js`) – See all the changes of rate or owner
 
-## Application Screenshots
-
-### Home Page
-![Home Page](screenshots/index.png)
-
-### Manager Page (Update Rate)
-![Manager Page 1](screenshots/manager1.png)
-
-### Manager Page (Transaction Confirmation)
-![Manager Page 2](screenshots/manager2.png)
-
-### User Page (Interest Calculation)
-![User Page](screenshots/user.png)
-
-
----
 
 ## 10. Git Commands Used
 
