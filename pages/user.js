@@ -1,12 +1,11 @@
 import { ethers } from "ethers";
 import { useState } from "react";
 import Link from "next/link";
+import InterestCalABI from "../utils/InterestCalABI";
+
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
-const abi = [
-  "function calculateInterest(uint P, uint T) public view returns (uint)"
-];
 
 export default function User() {
   const [P, setP] = useState("");
@@ -15,7 +14,7 @@ export default function User() {
 
   async function calculate() {
     const provider = new ethers.BrowserProvider(window.ethereum);
-    const contract = new ethers.Contract(contractAddress, abi, provider);
+    const contract = new ethers.Contract(contractAddress, InterestCalABI, provider);
     const res = await contract.calculateInterest(P, T);
     setResult(res.toString());
   }

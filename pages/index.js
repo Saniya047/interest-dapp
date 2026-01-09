@@ -13,6 +13,11 @@ export default function Home() {
         <Link href="/user">
           <button>User</button>
         </Link>
+
+         <Link href="/logs">
+          <button>See Logs</button>
+        </Link>
+        
       </div>
     </div>
   );
